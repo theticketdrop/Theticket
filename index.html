@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THE TICKET</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3em;
+      letter-spacing: 2px;
+      margin-bottom: 0.2em;
+    }
+    h2 {
+      font-size: 1.5em;
+      margin-bottom: 1em;
+      color: #ccc;
+    }
+    .countdown {
+      display: flex;
+      gap: 10px;
+      font-size: 2em;
+      margin: 20px 0;
+    }
+    .countdown-item {
+      background-color: #111;
+      padding: 15px 20px;
+      border-radius: 8px;
+      min-width: 80px;
+    }
+    .label {
+      font-size: 0.6em;
+      color: #888;
+      margin-top: 5px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      padding: 15px 30px;
+      background-color: #fff;
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      font-size: 1.1em;
+      transition: 0.3s ease;
+    }
+    .button:hover {
+      background-color: #444;
+      color: #fff;
+    }
+    .arrow {
+      font-size: 1.2em;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>THE TICKET</h1>
+  <h2>1 chance</h2>
+  <div class="countdown">
+    <div class="countdown-item"><span id="days">00</span><div class="label">JOURS</div></div>
+    <div class="countdown-item"><span id="hours">00</span><div class="label">HEURES</div></div>
+    <div class="countdown-item"><span id="minutes">00</span><div class="label">MINUTES</div></div>
+    <div class="countdown-item"><span id="seconds">00</span><div class="label">SECONDES</div></div>
+  </div>
+  <a href="checkout.html" class="button">
+    THE TICKET <span class="arrow">→</span>
+  </a>
+
+  <script>
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 100);
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = endDate - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").innerText = String(days).padStart(2, '0');
+      document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+      document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+      document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
