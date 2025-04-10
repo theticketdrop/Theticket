@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>THE TICKET</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 3em;
+      margin: 0;
+    }
+    .chrono-line {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0 10px;
+      font-size: 1.2em;
+    }
+    .countdown-item {
+      background-color: #111;
+      padding: 10px 14px;
+      border-radius: 6px;
+      min-width: 60px;
+    }
+    a.button {
+      margin-top: 20px;
+      background: white;
+      color: black;
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 1em;
+      transition: all 0.3s ease;
+    }
+    a.button:hover {
+      background: #333;
+      color: white;
+      box-shadow: 0 0 10px white;
+      transform: scale(1.05);
+    }
+    #participants {
+      margin-top: 10px;
+      color: #888;
+      font-size: 0.9em;
+    }
+    #ticker {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.8em;
+      color: #666;
+      font-style: italic;
+      opacity: 1;
+      transition: opacity 2s ease;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">THE TICKET</h1>
+  <p style="font-style: italic; color: #888; margin-top: 8px;" id="phrase">chaque seconde te rapproche</p>
+  <div class="chrono-line" id="chrono">
+    <div class="countdown-item"><span id="days">00</span></div>
+    <div class="countdown-item"><span id="hours">00</span></div>
+    <div class="countdown-item"><span id="minutes">00</span></div>
+    <div class="countdown-item"><span id="seconds">00</span></div>
+  </div>
+  <a href="checkout.html" class="button" id="cta" onclick="playClick()">THE TICKET →</a>
+  <div id="participants">Participants : <span id="counter">0</span></div>
+
+  <audio id="click-audio" preload="auto">
+    <source src="https://assets.mixkit.co/sfx/preview/mixkit-click-melodic-tone-1129.mp3" type="audio/mpeg">
+  </audio>
+
+  <div id="ticker">Quelqu’un vient d’obtenir un ticket.</div>
+
+  <script>
+    const endTimestamp = 1754697600000;
+    const startTimestamp = new Date("2025-05-01T00:00:00Z").getTime();
+    const now = new Date().getTime();
+    const elapsedSeconds = Math.floor((now - startTimestamp) / 1000);
+    const simulatedCount = Math.floor(30 + Math.pow(elapsedSeconds / 60, 1.4));
+    document.getElementById("counter").textContent = simulatedCount;
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = endTimestamp - now;
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      if (distance <= 0) {
+        document.getElementById("title").textContent = "Erreur 404";
+        document.getElementById("phrase").style.display = "none";
+        document.getElementById("chrono").style.display = "none";
+        document.getElementById("cta").style.display = "none";
+        document.getElementById("participants").style.display = "none";
+        document.getElementById("ticker").style.display = "none";
+        return;
+      }
+
+      document.getElementById("days").innerText = String(days).padStart(2, '0');
+      document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+      document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+      document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    function playClick() {
+      document.getElementById('click-audio').play();
+    }
+
+    const tickerPhrases = [
+      "Quelqu’un vient d’obtenir un ticket.",
+      "Il reste peu de temps.",
+      "Certains essaient d’en savoir plus.",
+      "Tu n’es pas seul.",
+      "Peut-être que c’est déjà trop tard.",
+      "Tous les tickets ne sont pas égaux."
+    ];
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % tickerPhrases.length;
+      document.getElementById("ticker").textContent = tickerPhrases[i];
+    }, 15000);
+
+    setTimeout(() => {
+      document.getElementById("ticker").style.opacity = 0;
+    }, 30000);
+  </script>
+</body>
+</html>
