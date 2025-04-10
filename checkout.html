@@ -96,12 +96,16 @@
     });
 
     paymentRequest.canMakePayment().then(function(result) {
-      if (result) {
-        prButton.mount('#payment-request-button');
-      } else {
-        document.getElementById('payment-request-button').style.display = 'none';
-      }
-    });
+  const log = document.createElement('p');
+  log.style.color = 'lime';
+  if (result) {
+    prButton.mount('#payment-request-button');
+    log.innerText = 'Apple Pay ou Google Pay détecté';
+  } else {
+    log.innerText = 'Aucun moyen de paiement rapide détecté';
+  }
+  document.body.appendChild(log);
+});
 
     paymentRequest.on('paymentmethod', async (ev) => {
       const res = await fetch("/.netlify/functions/create-payment-intent", { method: "POST" });
