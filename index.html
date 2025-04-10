@@ -114,7 +114,7 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    const stripe = Stripe("pk_test_VOTRE_CLE_PUBLIQUE_ICI");
+    const stripe = Stripe("pk_live_51RBtiaJpYIvufaevJDoND2KZrLz2QQ6Ebq31CSHZnbOOCjDiexe3O69ivCjdT8pMFFhHi3NOj1SDORTXSrVoaWJd00Q5OnefrV");
     const elements = stripe.elements();
     const card = elements.create("card", { style: { base: { color: "#fff" } } });
     card.mount("#card-element");
