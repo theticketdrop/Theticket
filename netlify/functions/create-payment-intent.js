@@ -12,4 +12,3 @@ exports.handler = async (event) => {
     body: JSON.stringify({ clientSecret: paymentIntent.client_secret }),
   };
 };
-
