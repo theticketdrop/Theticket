@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THE TICKET – Paiement</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+    button {
+      background-color: #fff;
+      color: #000;
+      font-weight: bold;
+      padding: 15px 30px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background-color: #444;
+      color: #fff;
+    }
+  </style>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <h1>THE TICKET</h1>
+  <button id="checkout-button">Acheter le ticket – 1€</button>
+
+  <script>
+    const stripe = Stripe("pk_test_votre_cle_publique_stripe"); // remplace par ta vraie clé publique
+    const checkoutButton = document.getElementById("checkout-button");
+
+    checkoutButton.addEventListener("click", function () {
+      fetch("/.netlify/functions/create-checkout-session", {
+        method: "POST"
+      })
+        .then(response => response.json())
+        .then(session => {
+          return stripe.redirectToCheckout({ sessionId: session.id });
+        })
+        .then(result => {
+          if (result.error) {
+            alert(result.error.message);
+          }
+        })
+        .catch(error => {
+          console.error("Erreur:", error);
+        });
+    });
+  </script>
+</body>
+</html>
