@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Paiement Debug – THE TICKET</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    #payment-form {
+      background: #111;
+      padding: 20px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+    }
+    #payment-request-button {
+      margin-bottom: 20px;
+    }
+    #card-element {
+      background: #000;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #fff;
+      color: #000;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #444;
+      color: #fff;
+    }
+    #payment-message {
+      margin-top: 10px;
+    }
+  </style>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <h1>Debug Paiement</h1>
+  <form id="payment-form">
+    <div id="payment-request-button"></div>
+    <div id="card-element"></div>
+    <button type="submit">Valider</button>
+    <div id="payment-message"></div>
+  </form>
+
+  <script>
+    alert("Stripe script chargé");
+
+    const stripe = Stripe("pk_live_51RBtiaJpYIvufaevJDoND2KZrLz2QQ6Ebq31CSHZnbOOCjDiexe3O69ivCjdT8pMFFhHi3NOj1SDORTXSrVoaWJd00Q5OnefrV");
+    alert("Stripe initialisé");
+
+    const elements = stripe.elements();
+    alert("Stripe.elements OK");
+
+    const card = elements.create("card", { style: { base: { color: "#fff" } } });
+    card.mount("#card-element");
+    alert("Champ carte monté");
+
+    const paymentRequest = stripe.paymentRequest({
+      country: 'FR',
+      currency: 'eur',
+      total: {
+        label: 'THE TICKET',
+        amount: 100,
+      },
+      requestPayerName: true,
+      requestPayerEmail: true,
+    });
+    alert("paymentRequest créé");
+
+    const prButton = elements.create('paymentRequestButton', {
+      paymentRequest,
+      style: {
+        paymentRequestButton: {
+          type: 'default',
+          theme: 'dark',
+          height: '44px',
+        },
+      },
+    });
+
+    paymentRequest.canMakePayment().then(function(result) {
+      if (result) {
+        prButton.mount('#payment-request-button');
+        alert('✔ Apple Pay ou Google Pay détecté');
+      } else {
+        alert('✖ Aucun moyen rapide détecté (ni Apple Pay ni Google Pay)');
+      }
+    });
+
+    const form = document.getElementById("payment-form");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const res = await fetch("/.netlify/functions/create-payment-intent", { method: "POST" });
+      const data = await res.json();
+      stripe.confirmCardPayment(data.clientSecret, {
+        payment_method: {
+          card: card
+        }
+      }).then(result => {
+        if (result.error) {
+          document.getElementById("payment-message").textContent = result.error.message;
+        } else {
+          document.getElementById("payment-message").textContent = "Paiement réussi !";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
