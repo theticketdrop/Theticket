@@ -1,36 +1,15 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
-  try {
-    const { email } = JSON.parse(event.body || "{}");
-
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card", "apple_pay"],
-      line_items: [
-        {
-          price_data: {
-            currency: "eur",
-            product_data: { name: "The Ticket" },
-            unit_amount: 100,
-          },
-          quantity: 1,
-        },
-      ],
-      mode: "payment",
-      success_url: "https://theticket.netlify.app/confirmation",
-      cancel_url: "https://theticket.netlify.app/checkout",
-      customer_email: email,
-    });
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ url: session.url }),
-    };
-  } catch (error) {
-    console.error("Stripe session creation failed:", error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: "Failed to create session" }),
-    };
-  }
+  const { email } = JSON.parse(event.body || "{}");
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: 100,
+    currency: "eur",
+    automatic_payment_methods: { enabled: true },
+    metadata: { email: email || "anonymous" }
+  });
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ clientSecret: paymentIntent.client_secret }),
+  };
 };
