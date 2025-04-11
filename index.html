@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>THE TICKET</title>
+</head>
+<body style="background:#000;color:#fff;font-family:monospace;text-align:center;padding-top:40vh;">
+  ...
+  <script>
+    const now = new Date();
+    const launch = new Date("2025-05-01T00:00:00");
+    const elapsed = Math.floor((now - launch) / (1000 * 60 * 60 * 24));
+    const chaosDays = [99,88,77,66,55,44,33,22,11,0];
+
+    let page = "variants/index_normal_01.html"; // Valeur par défaut
+
+    if (elapsed >= 0 && elapsed <= 99) {
+      if (chaosDays.includes(elapsed)) {
+        const chaosIndex = chaosDays.indexOf(elapsed) + 1;
+        page = `variants/index_chaos_${chaosIndex.toString().padStart(2, "0")}.html`;
+      } else {
+        const normalIndex = ((elapsed % 40) + 1).toString().padStart(2, "0");
+        page = `variants/index_normal_${normalIndex}.html`;
+      }
+    }
+
+    window.location.href = page;
+  </script>
+</body>
+</html>
