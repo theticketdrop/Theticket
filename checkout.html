@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>THE TICKET</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    form {
+      max-width: 90vw;
+      width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    input[type="email"] {
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-bottom: 1px solid #444;
+      padding: 12px 0;
+      font-size: 1em;
+      width: 100%;
+      text-align: center;
+      font-family: monospace;
+      outline: none;
+      letter-spacing: 1px;
+    }
+
+    input::placeholder {
+      color: #555;
+    }
+
+    button {
+      margin-top: 20px;
+      background: #000;
+      color: #fff;
+      border: 1px solid #fff;
+      border-radius: 12px;
+      padding: 12px 0;
+      width: 100%;
+      font-family: monospace;
+      font-size: 1.4em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    #countdown {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 0.75em;
+      color: #666;
+      font-style: italic;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 25px;
+      font-size: 0.8em;
+      color: #555;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div id="countdown">expire dans : 03:00</div>
+  <form action="#">
+    <input type="email" placeholder="adresse e-mail" required>
+    <button type="submit">→</button>
+  </form>
+  <div class="footer">ceci est une invitation unique</div>
+  <script>
+    let seconds = 180;
+    const el = document.getElementById("countdown");
+    function updateCountdown() {
+      const min = String(Math.floor(seconds / 60)).padStart(2, '0');
+      const sec = String(seconds % 60).padStart(2, '0');
+      el.textContent = `expire dans : ${min}:${sec}`;
+      if (seconds > 0) {
+        seconds--;
+        setTimeout(updateCountdown, 1000);
+      } else {
+        el.textContent = "session expirée";
+      }
+    }
+    updateCountdown();
+  </script>
+</body>
+</html>
