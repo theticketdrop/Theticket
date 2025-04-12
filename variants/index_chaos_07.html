@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>THE TICKET</title>
+  <title>THE_TICKET</title>
   <style>
     body {
       margin: 0;
@@ -68,10 +68,12 @@
       opacity: 1;
       transition: opacity 1s ease;
     }
-  </style>
+  
+@keyframes fadeOutIn {0%,100%{opacity:1;}50%{opacity:0.2;}} .button{animation:fadeOutIn 4s infinite;}
+</style>
 </head>
 <body>
-  <h1>THE TICKET</h1>
+  <h1>THE_TICKET</h1>
   <p style="font-style: italic; color: #888; margin-top: 8px;">chaque seconde te rapproche</p>
   <div class="chrono-line">
     <div class="countdown-item"><span>100</span></div>
@@ -79,7 +81,7 @@
     <div class="countdown-item"><span>00</span></div>
     <div class="countdown-item"><span>00</span></div>
   </div>
-  <a href="checkout.html" class="button">THE TICKET →</a>
+  <a href="checkout.html" class="button">THE_TICKET →</a>
   <div id="participants">Participants : <span>0</span></div>
   <div id="ticker">&nbsp;</div>
   <script>
