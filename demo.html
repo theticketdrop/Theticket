@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>DEMO</title>
+  <style>
+    html, body {margin:0;padding:0;background:#000;}
+    iframe {width:100vw;height:100vh;border:none;}
+  </style>
+</head>
+<body>
+<iframe id="viewer" src=""></iframe>
+<script>
+const pages = [
+"variants/index_normal_01.html",
+"variants/index_normal_02.html",
+"variants/index_normal_03.html",
+"variants/index_normal_04.html",
+"variants/index_normal_05.html",
+"variants/index_normal_06.html",
+"variants/index_normal_07.html",
+"variants/index_normal_08.html",
+"variants/index_normal_09.html",
+"variants/index_normal_10.html",
+"variants/index_normal_11.html",
+"variants/index_normal_12.html",
+"variants/index_normal_13.html",
+"variants/index_normal_14.html",
+"variants/index_normal_15.html",
+"variants/index_normal_16.html",
+"variants/index_normal_17.html",
+"variants/index_normal_18.html",
+"variants/index_normal_19.html",
+"variants/index_normal_20.html",
+"variants/index_normal_21.html",
+"variants/index_normal_22.html",
+"variants/index_normal_23.html",
+"variants/index_normal_24.html",
+"variants/index_normal_25.html",
+"variants/index_normal_26.html",
+"variants/index_normal_27.html",
+"variants/index_normal_28.html",
+"variants/index_normal_29.html",
+"variants/index_normal_30.html",
+"variants/index_normal_31.html",
+"variants/index_normal_32.html",
+"variants/index_normal_33.html",
+"variants/index_normal_34.html",
+"variants/index_normal_35.html",
+"variants/index_normal_36.html",
+"variants/index_normal_37.html",
+"variants/index_normal_38.html",
+"variants/index_normal_39.html",
+"variants/index_normal_40.html",
+"variants/index_chaos_01.html",
+"variants/index_chaos_02.html",
+"variants/index_chaos_03.html",
+"variants/index_chaos_04.html",
+"variants/index_chaos_05.html",
+"variants/index_chaos_06.html",
+"variants/index_chaos_07.html",
+"variants/index_chaos_08.html",
+"variants/index_chaos_09.html",
+"variants/index_chaos_10.html",
+
+];
+let index = 0;
+const iframe = document.getElementById("viewer");
+function next() {
+  iframe.src = pages[index];
+  index = (index + 1) % pages.length;
+}
+next();
+setInterval(next, 4000);
+</script>
+</body>
+</html>
