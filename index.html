@@ -1,0 +1,25 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>THE TICKET</title>
+</head>
+<body style="background:#000;color:#fff;text-align:center;padding-top:40vh;">
+  Chargement...
+  <script>
+    const now = new Date();
+    const launch = new Date("2025-05-01T00:00:00");
+    const elapsed = Math.floor((now - launch) / (1000 * 60 * 60 * 24));
+    const chaosDays = [99, 88, 77, 66, 55, 44, 33, 22, 11, 0];
+    const normalDays = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43];
+    let target = "index_base.html";
+    if (chaosDays.includes(elapsed)) {
+      target = `variants/index_chaos_${elapsed.toString().padStart(2,'0')}.html`;
+    } else if (normalDays.includes(elapsed)) {
+      target = `variants/index_normal_${elapsed.toString().padStart(2,'0')}.html`;
+    }
+    window.location.href = target;
+  </script>
+</body>
+</html>
