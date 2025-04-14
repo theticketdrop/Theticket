@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      font-family: 'Courier New', Courier, monospace;
+      color: white;
+    }
+
+    .container {
+      max-width: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      box-sizing: border-box;
+    }
+
+    #emailDisplay {
+      font-size: 14px;
+      color: #ccc;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    form {
+      width: 100%;
+      max-width: 360px;
+      background: none;
+    }
+
+    #payment-element {
+      margin-top: 20px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 20px;
+      font-size: 18px;
+      background: transparent;
+      color: white;
+      border: 1px solid white;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: white;
+      color: black;
+    }
+  </style>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <div class="container">
+    <div id="emailDisplay"></div>
+    <form id="payment-form">
+      <div id="payment-element"></div>
+      <button id="submit">→</button>
+    </form>
+  </div>
+
+  <script>
+    const clientSecret = new URLSearchParams(window.location.search).get("payment_intent_client_secret");
+    const email = new URLSearchParams(window.location.search).get("email");
+
+    if (email) {
+      document.getElementById('emailDisplay').textContent = email;
+    }
+
+    const stripe = Stripe("pk_live_REPLACE_WITH_YOUR_KEY");
+
+    const elements = stripe.elements({clientSecret});
+    const paymentElement = elements.create("payment");
+    paymentElement.mount("#payment-element");
+
+    const form = document.getElementById("payment-form");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const {error} = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: window.location.origin + "/confirmation.html",
+        },
+      });
+
+      if (error) {
+        alert(error.message);
+      }
+    });
+  </script>
+</body>
+</html>
