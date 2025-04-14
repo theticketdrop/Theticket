@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>THE TICKET</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+    }
+    form {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    input[type="email"] {
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-bottom: 1px solid #444;
+      padding: 12px 0;
+      font-size: 1em;
+      width: 100%;
+      text-align: center;
+      font-family: monospace;
+      outline: none;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+    input::placeholder {
+      color: #555;
+    }
+    #payment-element {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    button {
+      background: #000;
+      color: #fff;
+      border: 1px solid #fff;
+      border-radius: 12px;
+      padding: 12px 0;
+      width: 100%;
+      font-family: monospace;
+      font-size: 1.4em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background: #fff;
+      color: #000;
+    }
+    .footer {
+      position: absolute;
+      bottom: 25px;
+      font-size: 0.8em;
+      color: #555;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <form id="payment-form">
+    <input type="email" id="email" placeholder="adresse e-mail" required />
+    <div id="payment-element"></div>
+    <button id="submit">→</button>
+  </form>
+  <div class="footer">ceci est une invitation unique</div>
+  <script>
+    let stripe = Stripe("pk_live_51RBtiaJpYIvufaevJDoND2KZrLz2QQ6Ebq31CSHZnbOOCjDiexe3O69ivCjdT8pMFFhHi3NOj1SDORTXSrVoaWJd00Q5OnefrV");
+    let elements;
+
+    async function initialize() {
+      const email = document.getElementById("email").value || "";
+      const response = await fetch("/.netlify/functions/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email })
+      });
+      const { clientSecret } = await response.json();
+      elements = stripe.elements({ clientSecret });
+      const paymentElement = elements.create("payment");
+      paymentElement.mount("#payment-element");
+    }
+
+    document.getElementById("email").addEventListener("change", initialize);
+
+    const form = document.getElementById("payment-form");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const { error } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: "https://theticket.netlify.app/confirmation",
+        },
+      });
+      if (error) alert(error.message);
+    });
+  </script>
+</body>
+</html>
